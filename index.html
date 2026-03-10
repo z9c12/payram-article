@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>I Gave an AI Agent a Payment Stack. It Set Itself Up in 10 Minutes. | PayRam</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,700;1,300;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0e0e0e;
+      --paper: #f5f2ed;
+      --accent: #e8342a;
+      --accent-soft: #fde8e7;
+      --muted: #6b6560;
+      --border: #ddd8d0;
+      --card-bg: #ffffff;
+      --code-bg: #1a1a1a;
+      --code-text: #b0f0b0;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.8;
+      font-size: 17px;
+    }
+
+    /* NAV BAR */
+    .topbar {
+      background: var(--ink);
+      color: #fff;
+      padding: 10px 32px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .topbar a { color: var(--accent); text-decoration: none; font-weight: 500; }
+
+    /* HERO */
+    .hero {
+      background: var(--ink);
+      color: #fff;
+      padding: 72px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 80% 0%, rgba(232,52,42,0.18) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 2px;
+      margin-bottom: 28px;
+      font-weight: 500;
+    }
+    .hero h1 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 600;
+      line-height: 1.18;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: #f7a29a;
+    }
+    .hero-meta {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      font-size: 13px;
+      color: #aaa;
+      letter-spacing: 0.04em;
+    }
+    .hero-meta span { display: flex; align-items: center; gap: 6px; }
+    .dot { width: 4px; height: 4px; background: var(--accent); border-radius: 50%; display: inline-block; }
+
+    /* LAYOUT */
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ARTICLE BODY */
+    .article-body {
+      padding: 60px 0 80px;
+    }
+
+    p {
+      margin-bottom: 1.6em;
+      color: #2a2520;
+    }
+
+    h2 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 600;
+      line-height: 1.25;
+      margin: 2.8em 0 0.8em;
+      color: var(--ink);
+      letter-spacing: -0.015em;
+    }
+    h2:first-of-type { margin-top: 0; }
+
+    h3 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 2em 0 0.6em;
+      color: var(--ink);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: rgba(232,52,42,0.3);
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.2s;
+    }
+    a:hover { text-decoration-color: var(--accent); }
+
+    /* PULL QUOTE */
+    .pullquote {
+      border-left: 3px solid var(--accent);
+      margin: 2.4em 0;
+      padding: 20px 28px;
+      background: var(--accent-soft);
+      border-radius: 0 6px 6px 0;
+    }
+    .pullquote p {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      font-weight: 300;
+      margin: 0;
+      color: #3a2820;
+      line-height: 1.6;
+    }
+
+    /* CALLOUT BOX */
+    .callout {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin: 2em 0;
+    }
+    .callout-title {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+    .callout p { margin: 0; font-size: 15px; color: #3a3530; }
+
+    /* CODE SNIPPET */
+    .code-block {
+      background: var(--code-bg);
+      border-radius: 8px;
+      padding: 22px 24px;
+      margin: 1.8em 0;
+      overflow-x: auto;
+    }
+    .code-block pre {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--code-text);
+    }
+    .code-comment { color: #666; }
+
+    /* FEATURE GRID */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin: 2em 0;
+    }
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .feature-card .icon { font-size: 1.5rem; margin-bottom: 10px; }
+    .feature-card strong {
+      display: block;
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .feature-card p {
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    /* COMPARISON TABLE */
+    .table-wrap { overflow-x: auto; margin: 2em 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th {
+      background: var(--ink);
+      color: #fff;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+    td {
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--border);
+      color: #3a3530;
+    }
+    tr:nth-child(even) td { background: #faf8f5; }
+    .check { color: #2a8a3a; font-weight: 600; }
+    .cross { color: #aaa; }
+
+    /* IMAGE PLACEHOLDER */
+    .img-block {
+      width: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 2.4em 0;
+      position: relative;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      padding: 48px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 220px;
+    }
+    .img-block .img-label {
+      color: rgba(255,255,255,0.5);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .img-block .img-headline {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.3;
+    }
+    .img-block .img-sub {
+      color: rgba(255,255,255,0.55);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    .img-accent {
+      width: 40px;
+      height: 3px;
+      background: var(--accent);
+      margin: 16px auto 0;
+      border-radius: 2px;
+    }
+
+    /* STAT ROW */
+    .stat-row {
+      display: flex;
+      gap: 20px;
+      margin: 2em 0;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      flex: 1;
+      min-width: 140px;
+      background: var(--ink);
+      color: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+    }
+    .stat-card .num {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #f7a29a;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-card .label { font-size: 12px; color: #aaa; letter-spacing: 0.06em; }
+
+    /* CTA STRIP */
+    .cta-strip {
+      background: var(--ink);
+      border-radius: 10px;
+      padding: 36px 32px;
+      margin: 3em 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .cta-strip p {
+      color: #e0dbd5;
+      font-size: 1.05rem;
+      margin: 0;
+      font-family: 'Fraunces', Georgia, serif;
+      font-style: italic;
+      line-height: 1.4;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff !important;
+      text-decoration: none !important;
+      padding: 13px 28px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+    .cta-btn:hover { opacity: 0.88; }
+
+    /* FOOTER */
+    .footer {
+      background: var(--ink);
+      color: #777;
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 13px;
+    }
+    .footer a { color: #aaa; }
+
+    /* DIVIDER */
+    hr.section-break {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 3em 0;
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 48px 20px 56px; }
+      .cta-strip { flex-direction: column; }
+      .stat-row { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <span>Builder's Notes</span>
+    <a href="https://payram.com" target="_blank">payram.com &rarr;</a>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-inner">
+      <span class="hero-tag">Deep Dive &middot; Payments Infrastructure</span>
+      <h1>I Gave an AI Agent a Payment Stack.<br><em>It Set Itself Up in 10 Minutes.</em></h1>
+      <div class="hero-meta">
+        <span>March 2026</span>
+        <span class="dot"></span>
+        <span>~1,500 words</span>
+        <span class="dot"></span>
+        <span>PayRam MCP &amp; Card-to-Crypto Onramp</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ARTICLE -->
+  <main class="container">
+    <article class="article-body">
+
+      <p>
+        Here is a scenario that probably sounds familiar if you have been building anything with AI in the last year. You have an agent doing something useful, booking things, calling APIs, generating content. At some point it needs to accept or initiate a payment. And suddenly you are back to being a human in a loop, spinning up a Stripe account, waiting for KYB approval, wiring in webhooks, figuring out why the payout landed three days late. The agent that was supposed to be autonomous is now blocked on paperwork designed for 2012.
+      </p>
+
+      <p>
+        That friction is what makes <a href="https://payram.com" target="_blank">PayRam</a> interesting. I spent a few sessions going deep on their docs, their MCP tooling, and their new card-to-crypto onramp feature. What I found was a piece of infrastructure that is genuinely designed for the moment we are in right now: a world where both humans and agents need to move money, and neither of them should have to ask permission first.
+      </p>
+
+      <div class="img-block">
+        <div class="img-label">PayRam Overview</div>
+        <div class="img-headline">Stablecoin Payments Without Signup or KYB</div>
+        <div class="img-sub">Self-hosted &bull; Non-custodial &bull; Agent-ready</div>
+        <div class="img-accent"></div>
+      </div>
+
+      <h2>What PayRam Actually Is</h2>
+
+      <p>
+        PayRam describes itself as the world's first self-hosted stablecoin payment gateway. That framing matters. It is not a SaaS product where you create an account and rent infrastructure. You deploy it on your own VPS, it runs on your server, your database, your SSL. Once it is running, no third party can freeze your funds, change the fee structure, or decide your industry is too risky. It is closer in spirit to running your own mail server than to signing up for Mailchimp.
+      </p>
+
+      <p>
+        The setup is a single bash command. I ran it and had a working payment node in under 15 minutes. It supports USDT and USDC natively across Ethereum, Base, Polygon, Tron, and TON, with Bitcoin also in the mix. Smart contracts handle fund movement to cold storage; private keys never touch the application server.
+      </p>
+
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="num">$100M+</div>
+          <div class="label">On-chain volume settled</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">850K+</div>
+          <div class="label">On-chain transactions</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">100+</div>
+          <div class="label">Active merchants</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">10 min</div>
+          <div class="label">Typical deploy time</div>
+        </div>
+      </div>
+
+      <hr class="section-break" />
+
+      <h2>The MCP Angle: Letting Agents Actually Pay for Things</h2>
+
+      <p>
+        The piece I found most compelling is the <a href="https://docs.payram.com/mcp/payram-mcp" target="_blank">PayRam MCP server</a>. If you have not been following the Model Context Protocol rabbit hole, the short version is: MCP is a standard that lets AI models connect to external tools in a structured way. Instead of your agent needing custom integration code for every service it touches, you register MCP servers and the agent discovers what it can do via a protocol handshake.
+      </p>
+
+      <p>
+        PayRam ships a production-ready MCP server that exposes payment primitives directly to any MCP-aware agent. We are talking Claude Desktop, GitHub Copilot, Cursor, n8n workflows, or whatever custom system you are running. You add this to your agent config:
+      </p>
+
+      <div class="code-block">
+        <pre><span class="code-comment">// Register PayRam MCP in your agent config</span>
+{
+  "mcpServers": {
+    "payram": {
+      "url": "https://mcp.payram.com/mcp"
+    }
+  }
+}
+
+<span class="code-comment">// Your agent can now:</span>
+<span class="code-comment">// create-payee, send-payment, get-balance</span>
+<span class="code-comment">// generate-invoice, test-connection</span>
+</pre>
+      </div>
+
+      <p>
+        No API keys from external services. No approval flow. The agent discovers the available tools automatically and can start orchestrating payments through natural language. You can literally prompt: <em>"Create a 50 USDC payment link on Base"</em> and it works. For anyone building autonomous workflows, this is a meaningful step change.
+      </p>
+
+      <div class="pullquote">
+        <p>"PayRam is to crypto payments what WordPress is to web publishing: neutral, self-hosted infrastructure that you own and operate permanently. Whether you're building an AI agent marketplace or an autonomous commerce system, this is the foundational layer."</p>
+      </div>
+
+      <h3>What the MCP Server Actually Exposes</h3>
+
+      <p>
+        The <a href="https://mcp.payram.com" target="_blank">MCP documentation</a> breaks down the key capabilities into real operational workflows, not just toy demos. <a href="https://docs.payram.com/mcp/payram-mcp" target="_blank">Payment operations</a> cover creating payment intents, tracking status, and managing the full lifecycle end to end. Payout management lets agents initiate and monitor payouts across multiple chains. Webhook handling includes signature verification. There is even a referral system for agents that want to set up incentive campaigns programmatically.
+      </p>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="icon">⚡</div>
+          <strong>Payment Operations</strong>
+          <p>Create intents, track status, manage full lifecycle via natural language or code.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">↔️</div>
+          <strong>Payout Management</strong>
+          <p>Initiate and monitor payouts across chains without leaving the agent context.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🔔</div>
+          <strong>Webhooks Built-in</strong>
+          <p>Real-time deposit detection with automatic callbacks on confirmation.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">📊</div>
+          <strong>Analytics MCP</strong>
+          <p>Query P&amp;L, user growth, and deposit distribution straight from Telegram.</p>
+        </div>
+      </div>
+
+      <p>
+        The <a href="https://docs.payram.com/mcp/analytics-mcp" target="_blank">Analytics MCP</a> is a separate layer worth calling out. You can wire it to a Telegram bot and query your payment data in natural language from any allowlisted chat. "Show me today's payment summary." "Top paying users this week." "Deposit distribution by chain for the last 7 days." The whole thing runs server-side, so your data stays on your infrastructure. It is a surprisingly practical feature for operators who want monitoring without opening a dashboard.
+      </p>
+
+      <hr class="section-break" />
+
+      <h2>The Onramp Problem: Why Most Merchants Are Still Leaving Customers Behind</h2>
+
+      <p>
+        Here is the part that affects a different audience: merchants who want to accept crypto but whose customers do not have any. This is the unsexy problem that blocks real adoption. You build a beautiful checkout experience accepting USDC, and then you discover that 80% of your potential customers would need to go set up a Coinbase account, buy USDC, figure out gas fees, and come back three days later. They do not do that. They leave.
+      </p>
+
+      <p>
+        A <a href="https://docs.payram.com/features/card-to-crypto-fiat-onramp" target="_blank">crypto onramp</a> is the bridge that converts that problem into a solvable one. The customer pays with whatever they have. You receive settled crypto. PayRam's card-to-crypto onramp does exactly this, and the implementation is genuinely clean.
+      </p>
+
+      <div class="img-block" style="background: linear-gradient(135deg, #1a0a0a 0%, #2d1010 50%, #1a0a0a 100%);">
+        <div class="img-label">Card-to-Crypto Flow</div>
+        <div class="img-headline">Customer pays by card.<br>Merchant receives USDC on Base.</div>
+        <div class="img-sub">175+ payment methods &bull; 190+ countries &bull; Non-custodial settlement</div>
+        <div class="img-accent"></div>
+      </div>
+
+      <h3>How It Works in Practice</h3>
+
+      <p>
+        The merchant activates card payments from their PayRam dashboard under Payment Channels. No KYC or KYB required on the merchant side. Card payments currently settle on the Base blockchain, so that chain needs to be enabled in your node settings. Once active, the checkout page shows a Cards option alongside the native crypto payment flow.
+      </p>
+
+      <p>
+        On the customer side, PayRam generates a self-custodial wallet for them automatically. They complete a one-time basic KYC on their first purchase, then can pay by credit card, debit card, Apple Pay, Google Pay, bank transfer (ACH, SEPA, and local equivalents), or RevolutPay for all future transactions. The fiat gets converted by regulated third-party partners and lands as crypto directly in the customer's self-custody wallet. The customer then uses those funds to complete the transaction with the merchant.
+      </p>
+
+      <div class="callout">
+        <div class="callout-title">Coverage</div>
+        <p>The onramp supports 175+ payment methods across 190+ countries, with smart routing that matches each customer to the best available option based on region, transaction size, and payment preference. PayRam does not add any markup on top of the third-party onramp provider's fees.</p>
+      </div>
+
+      <p>
+        The thing that struck me most here is the non-custodial angle. The crypto does not sit in an intermediary's account waiting to be forwarded. It goes directly into a wallet the customer controls. That means if they want to keep using crypto after this transaction, they already have a wallet loaded and ready.
+      </p>
+
+      <hr class="section-break" />
+
+      <h2>Who Is This Actually For?</h2>
+
+      <p>
+        Reading the docs and the comparisons on the MCP site, the positioning is pretty clear. PayRam is not trying to replace Stripe for mainstream e-commerce. It is targeting a specific set of people for whom the existing options are genuinely broken.
+      </p>
+
+      <p>
+        High-risk industries are the obvious case. iGaming, adult, crypto services, and similar verticals get deplatformed by hosted gateways with little notice. If your payments infrastructure can be revoked, it is not really your infrastructure. PayRam solves that structurally, not through policy promises.
+      </p>
+
+      <p>
+        Agent builders are the more interesting newer audience. <a href="https://docs.payram.com/mcp/payram-mcp" target="_blank">Agentic payments</a> via MCP are moving from theoretical to practical fast. Boston Consulting Group's 2025 Global Payments Report estimated agentic AI will influence more than $1 trillion in spending, potentially accounting for nearly half of all online commerce within a few years. The developers building the infrastructure for that wave need something that works without human-in-the-loop approval flows. PayRam fits.
+      </p>
+
+      <p>
+        Marketplaces and PSPs are a third use case. You can white-label PayRam to offer stablecoin payment infrastructure to your own clients, becoming a payment service provider rather than just a payment user.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Capability</th>
+              <th>PayRam</th>
+              <th>BTCPay Server</th>
+              <th>Hosted Gateway</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Self-hosted</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+              <td class="cross">✗</td>
+            </tr>
+            <tr>
+              <td>Stablecoin-native (USDT/USDC)</td>
+              <td class="check">✓ First-class</td>
+              <td class="cross">Via plugins</td>
+              <td class="cross">Limited</td>
+            </tr>
+            <tr>
+              <td>MCP integration</td>
+              <td class="check">✓ Production</td>
+              <td class="cross">None</td>
+              <td class="cross">None</td>
+            </tr>
+            <tr>
+              <td>Card-to-crypto onramp</td>
+              <td class="check">✓ Built-in</td>
+              <td class="cross">No</td>
+              <td class="cross">Separate product</td>
+            </tr>
+            <tr>
+              <td>No KYB to deploy</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+              <td class="cross">Required</td>
+            </tr>
+            <tr>
+              <td>High-risk friendly</td>
+              <td class="check">✓ Permissionless</td>
+              <td class="check">✓</td>
+              <td class="cross">Subject to ToS</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="section-break" />
+
+      <h2>A Couple of Things Worth Knowing Before You Dive In</h2>
+
+      <p>
+        Card payments currently settle only on the Base blockchain. If you are running a multi-chain setup and expecting card onramp support everywhere, you will need to make sure Base is active. That is a reasonable limitation for now, and Base is a solid choice for low-fee stablecoin settlement, but worth knowing upfront.
+      </p>
+
+      <p>
+        The self-hosted model also means you are responsible for your own compliance. PayRam is infrastructure, not a financial institution. KYC, AML, and sanctions screening in your jurisdiction are on you. That is the trade-off for permissionless deployment, and it is the right trade-off for the use cases this is designed for, but it requires clear eyes going in.
+      </p>
+
+      <p>
+        Server requirements are real. The agent setup script recommends 8 CPU cores, 8GB RAM, and 100GB SSD. The basic deployment can run on lighter specs (4 CPU, 4GB RAM, 50GB SSD), but if you are planning to run the full MCP agent stack, size accordingly.
+      </p>
+
+      <hr class="section-break" />
+
+      <h2>The Bigger Picture</h2>
+
+      <p>
+        PayRam's co-founder Siddharth Menon, previously co-founder of WazirX which scaled to 15 million users, described the project's aim simply: helping merchants and builders become their own payment processor. That framing is exactly right. This is not about crypto speculation or maximalism. It is about ownership of critical infrastructure at a moment when that ownership is becoming possible for individual developers and small teams.
+      </p>
+
+      <p>
+        The combination of <a href="https://mcp.payram.com" target="_blank">MCP payments</a>, a usable <a href="https://docs.payram.com/features/card-to-crypto-fiat-onramp" target="_blank">card-to-crypto onramp</a>, and a genuinely permissionless deployment model covers a lot of ground that no single product has covered before. The MCP tooling is production-grade, not a demo. The onramp covers 190+ countries out of the box. And the whole thing runs on your server.
+      </p>
+
+      <p>
+        If you are building something that needs to accept money, whether that is a human running an e-commerce store or an agent autonomously paying for API calls, it is worth spending an hour with the <a href="https://docs.payram.com" target="_blank">docs</a>. The 10-minute deploy claim is real. I checked.
+      </p>
+
+      <!-- CTA -->
+      <div class="cta-strip">
+        <p>Ready to own your payment stack? No signups, no waiting lists.</p>
+        <a href="https://payram.com" target="_blank" class="cta-btn">Explore PayRam &rarr;</a>
+      </div>
+
+    </article>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>Written by an independent builder &bull; All product details verified from <a href="https://payram.com" target="_blank">payram.com</a> and <a href="https://docs.payram.com" target="_blank">docs.payram.com</a> &bull; March 2026</p>
+  </footer>
+
+</body>
+</html>
